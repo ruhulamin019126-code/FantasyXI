@@ -1,679 +1,215 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>FantasyXI</title>
-
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#031810;color:#fff}.app{max-width:520px;margin:auto;min-height:100vh;background:#06271e;padding-bottom:64px}
+header{height:56px;padding:7px 10px;background:#063b2d;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+.logo{font-size:20px;font-weight:900}.logo i{color:#18df69;font-style:normal}.money{display:flex;gap:5px}.money button,.btn{border:0;border-radius:8px;padding:7px 9px;font-size:10px;font-weight:900}.money button{background:#0b392d;border:1px solid #17604a;color:#fff}.coin{color:#ffd166!important}.cash{color:#18df69!important}
+.page{display:none;padding:10px}.page.active{display:block}.title{font-size:19px;font-weight:900}.sub,.small{font-size:10px;color:#91aaa3;margin:4px 0 8px}.step{font-size:8px;color:#7ea99c;margin-bottom:3px}
+.card,.match,.contest,.player,.tx{background:#092f24;border:1px solid #15523f;border-radius:11px;padding:9px;margin-bottom:7px}.row{display:flex;align-items:center;justify-content:space-between;gap:7px}.grow{flex:1}
+.btn{background:#18d267;color:#032216}.btn.dark{background:#123d31;color:#fff}.full{width:100%;margin-top:6px}.back{margin-bottom:8px}
+.badge{background:#e53935;padding:3px 6px;border-radius:9px;font-size:8px;font-weight:900}.gold{color:#ffd166}.green{color:#18d267}
+.count{text-align:center;font-size:20px;font-weight:900;color:#18d267;margin:5px}.score{font-size:28px;font-weight:900}.livebox{background:#351b19;border:1px solid #8f3434;border-radius:10px;padding:9px}
+.prize{background:#0b392d;border:1px solid #17604a;border-radius:8px;padding:7px;font-size:10px;margin-bottom:7px}
+.tabs,.filters{display:flex;gap:4px;overflow:auto;margin-bottom:7px}.tabs button,.filters button{border:0;border-radius:12px;padding:6px 8px;font-size:9px;background:#123d31;color:#a9beb8}.tabs .active,.filters .active{background:#18c866;color:#042116}
+.players{display:grid;gap:5px}.player{display:flex;align-items:center;gap:7px;margin:0}.avatar{width:31px;height:31px;border-radius:50%;background:#123f32;display:flex;align-items:center;justify-content:center;flex-shrink:0}.pm{font-size:8px;color:#91aaa3;margin-top:2px}.buy{background:#25483e;color:#fff;border:0;border-radius:6px;padding:6px 8px;font-weight:900}.buy.sel{background:#18d267;color:#032216}
+.budget{display:flex;justify-content:space-between;background:#0b392d;border:1px solid #17604a;border-radius:9px;padding:7px;font-size:10px;margin-bottom:7px}
+.lb{display:flex;align-items:center;gap:7px;background:#092f24;border:1px solid #15523f;border-radius:9px;padding:7px;margin-bottom:5px}.rank{width:22px;height:22px;border-radius:6px;background:#17483a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900}
+.wallet{text-align:center}.walletNum{font-size:34px;font-weight:900;margin:5px}.method{display:flex;gap:5px}.method button{flex:1}
+.profileItem{background:#092f24;border:1px solid #15523f;border-radius:9px;padding:9px;margin-bottom:5px;display:flex;justify-content:space-between;font-size:10px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;height:60px;background:#05251c;border-top:1px solid #17503d;display:flex;z-index:10}.nav{flex:1;border:0;background:none;color:#809b93;font-size:8px}.nav span{display:block;font-size:18px}.nav.active{color:#19d267}
+.quick{background:#092f24;border:1px solid #15523f;border-radius:9px;padding:7px 2px;text-align:center;font-size:8px}.homeGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:7px 0}
+.homeBtns{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:7px 0}.homeBtn{background:#092f24;border:1px solid #15523f;color:#fff;border-radius:9px;padding:8px;font-size:9px;font-weight:900}
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#18d267;color:#032216;padding:8px 12px;border-radius:8px;font-size:10px;font-weight:900;display:none;z-index:50}
+input,select{width:100%;margin-top:6px;padding:8px;border-radius:7px;border:1px solid #17604a;background:#06271e;color:#fff;font-size:10px}
+.fxExtra{background:#092f24;border:1px solid #15523f;border-radius:12px;padding:9px;margin:7px 0}.fxExtra h3{font-size:13px;margin-bottom:6px}.fxExtra .row{display:flex;gap:5px;flex-wrap:wrap}.fxExtra input,.fxExtra select{flex:1;min-width:90px}.fxExtra button{background:#18d267;color:#032216;border:0;border-radius:7px;padding:7px 9px;font-size:10px;font-weight:900}.fxStatus{font-size:10px;color:#91aaa3;margin-top:6px}
+.event{font-size:9px;color:#b9ccc7;border-top:1px solid #164c3c;padding-top:6px;margin-top:6px}.liveScoreCard{background:linear-gradient(135deg,#08734e,#063a2c);border:1px solid #17654c;border-radius:12px;padding:10px}.pointLine{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #164c3c;font-size:10px}.pointLine:last-child{border-bottom:0}.prizeRow{display:flex;justify-content:space-between;font-size:9px;padding:4px 0}.disabled{opacity:.55;pointer-events:none}.countdown{font-size:12px;font-weight:900;color:#ffd166;margin-top:4px}.statusPill{display:inline-block;padding:3px 6px;border-radius:8px;font-size:8px;font-weight:900;background:#123d31;color:#9fc7ba}.txline{padding:6px 0;border-bottom:1px solid #164c3c;font-size:9px}.txline:last-child{border-bottom:0}.teamActions{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.teamActions button{font-size:8px;padding:5px 7px;border-radius:6px;border:0;font-weight:900}.danger{background:#6b2d2d!important;color:#fff!important}.muted{color:#91aaa3}
+.badgeFeatures{margin-top:8px}.badgeTitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.badgeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.badgeCard{background:#062c23;border:1px solid #145846;border-radius:11px;padding:9px}.badgeIcon{font-size:21px;margin-bottom:4px}.badgeCard b{font-size:11px}.badgeCard .small{font-size:8px;display:block;margin:3px 0 7px}.badgeCard .btn{font-size:9px;padding:6px 7px;width:100%}.badgeStatus{margin-top:7px;color:#19d66b}
+.fxRequestInfo{display:grid;gap:5px;margin:6px 0}.fxRequestInfo input{margin:0!important;width:100%}
 
-body{
-  background:#031810;
-  color:#fff;
-  min-height:100vh;
-}
-
-.app{
-  max-width:700px;
-  margin:auto;
-  min-height:100vh;
-  background:#06271e;
-  padding-bottom:80px;
-}
-
-header{
-  padding:20px;
-  background:#041c15;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  position:sticky;
-  top:0;
-  z-index:10;
-  border-bottom:1px solid #164b3a;
-}
-
-.logo{
-  font-size:24px;
-  font-weight:bold;
-  color:#18df69;
-}
-
-.coins{
-  background:#123d30;
-  padding:9px 14px;
-  border-radius:20px;
-  color:#ffd84d;
-  font-weight:bold;
-}
-
-.page{
-  display:none;
-  padding:18px;
-}
-
-.page.active{
-  display:block;
-}
-
-.hero{
-  background:linear-gradient(135deg,#075b40,#092f24);
-  padding:24px;
-  border-radius:20px;
-  margin-bottom:18px;
-}
-
-.hero h1{
-  font-size:30px;
-  margin-bottom:8px;
-}
-
-.hero p{
-  color:#b9d8cc;
-  line-height:1.5;
-}
-
-.section-title{
-  font-size:20px;
-  margin:22px 0 12px;
-}
-
-.card{
-  background:#092f24;
-  border:1px solid #16513e;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:12px;
-}
-
-.match{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.team{
-  text-align:center;
-  font-weight:bold;
-}
-
-.team span{
-  display:block;
-  font-size:30px;
-  margin-bottom:6px;
-}
-
-.status{
-  color:#18df69;
-  font-size:13px;
-}
-
-.btn{
-  border:0;
-  background:#18df69;
-  color:#031810;
-  padding:12px 18px;
-  border-radius:12px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.btn.full{
-  width:100%;
-  margin-top:12px;
-}
-
-.btn.dark{
-  background:#123d30;
-  color:#fff;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-.feature{
-  background:#092f24;
-  border:1px solid #16513e;
-  padding:18px;
-  border-radius:16px;
-  text-align:center;
-}
-
-.feature div{
-  font-size:28px;
-  margin-bottom:8px;
-}
-
-.player{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:13px;
-  background:#06271e;
-  border:1px solid #164b3a;
-  border-radius:12px;
-  margin-bottom:8px;
-}
-
-.player small{
-  color:#9dbdb1;
-}
-
-.filters{
-  display:flex;
-  gap:7px;
-  overflow:auto;
-  margin-bottom:14px;
-}
-
-.filter{
-  white-space:nowrap;
-  padding:9px 14px;
-  border:1px solid #28644f;
-  border-radius:20px;
-  background:#092f24;
-  color:#fff;
-}
-
-.filter.active{
-  background:#18df69;
-  color:#031810;
-}
-
-.contest{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.prize{
-  color:#18df69;
-  font-size:18px;
-  font-weight:bold;
-}
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  max-width:700px;
-  margin:auto;
-  height:70px;
-  background:#041c15;
-  border-top:1px solid #164b3a;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:20;
-}
-
-.nav{
-  color:#91aaa0;
-  text-align:center;
-  font-size:12px;
-  cursor:pointer;
-}
-
-.nav span{
-  display:block;
-  font-size:22px;
-  margin-bottom:3px;
-}
-
-.nav.active{
-  color:#18df69;
-}
-
-input{
-  width:100%;
-  padding:13px;
-  background:#031810;
-  color:#fff;
-  border:1px solid #28644f;
-  border-radius:10px;
-  margin:7px 0;
-  outline:none;
-}
-
-.balance{
-  font-size:32px;
-  color:#18df69;
-  font-weight:bold;
-  margin:10px 0;
-}
-
-.back{
-  color:#18df69;
-  margin-bottom:15px;
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-  padding:40px 15px;
-  color:#8da99f;
-}
 </style>
 </head>
-
 <body>
-
 <div class="app">
+<header><div class="logo">Fantasy<i>XI</i></div><div class="money">
+<button class="coin" onclick="go('coins')">🪙 <span id="coins">100</span></button>
+</div></header>
 
-<header>
-  <div class="logo">🏏 FantasyXI</div>
-  <div class="coins">🪙 <span id="coins">1000</span></div>
-</header>
-
-<!-- HOME -->
+<div id="userApp">
 <section id="home" class="page active">
 
-<div class="hero">
-  <h1>Fantasy Cricket</h1>
-  <p>নিজের Dream Team তৈরি করো এবং ম্যাচের জন্য প্রস্তুত হও।</p>
-</div>
+<div id="homeBanner"></div>
+<div class="homeBtns"><button class="homeBtn" onclick="go('matches')">🗓 Upcoming Matches</button><button class="homeBtn" onclick="go('myteams')">👥 My Teams</button></div>
 
-<h2 class="section-title">🔥 Upcoming Matches</h2>
 
-<div class="card">
-  <div class="match">
-    <div class="team">
-      <span>🇧🇩</span>
-      Bangladesh
-    </div>
-
-    <div>
-      <div class="status">UPCOMING</div>
-      <strong>VS</strong>
-    </div>
-
-    <div class="team">
-      <span>🇵🇰</span>
-      Pakistan
-    </div>
-  </div>
-
-  <button class="btn full" onclick="showPage('match')">
-    View Match
-  </button>
-</div>
-
-<h2 class="section-title">⚡ Features</h2>
-
-<div class="grid">
-  <div class="feature" onclick="showPage('team')">
-    <div>👥</div>
-    Create Team
-  </div>
-
-  <div class="feature" onclick="showPage('contests')">
-    <div>🏆</div>
-    Contests
-  </div>
-
-  <div class="feature" onclick="showPage('live')">
-    <div>🔴</div>
-    Live Match
-  </div>
-
-  <div class="feature" onclick="showPage('profile')">
-    <div>👤</div>
-    Profile
-  </div>
-</div>
-
+<div id="badgeFeatureSection" class="badgeFeatures"><div class="badgeTitle"><b>🏅 Badge Features</b><span class="small">Coins দিয়ে Request করুন</span></div><div class="fxRequestInfo">
+<input id="badgePhone" type="tel" inputmode="numeric" maxlength="11" placeholder="📱 ফোন নম্বর • 01XXXXXXXXX">
+<input id="badgeName" type="text" maxlength="40" placeholder="👤 আপনার নাম">
+<div id="badgePhoneError" style="font-size:9px;color:#ff8f8f;margin-top:3px"></div>
+</div><div class="badgeGrid" id="badgeFeatureGrid"></div><div id="badgeRequestStatus" class="small badgeStatus"></div></div>
+<div id="homeNotification" class="card"><b style="font-size:11px">🔔 Notifications</b><div id="notificationList" class="small">কোনো নতুন Notification নেই।</div></div>
+<div id="homeBadges" class="card"><b style="font-size:11px">🏅 My Badges</b><div class="badgeStatGrid" style="margin-top:6px"><div class="badgeStat"><b id="bronzeCount">0</b><span>🥉 Bronze</span></div><div class="badgeStat"><b id="silverCount">0</b><span>🥈 Silver</span></div><div class="badgeStat"><b id="goldCount">0</b><span>🥇 Gold</span></div><div class="badgeStat"><b id="diamondCount">0</b><span>💎 Diamond</span></div></div></div>
 </section>
 
-<!-- MATCH -->
-<section id="match" class="page">
+<section id="matches" class="page"><div class="step">02 / 16</div><div class="title">🏏 Matches</div><div class="sub">Upcoming • Live • Completed</div><div id="matchesBanner"></div>
+<div class="tabs"><button class="active" onclick="renderMatches('upcoming',this)">Upcoming</button><button onclick="renderMatches('live',this)">Live</button><button onclick="renderMatches('completed',this)">Completed</button></div><div id="matchList"></div></section>
 
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h2>🇧🇩 Bangladesh vs Pakistan 🇵🇰</h2>
-
-<div class="card">
-  <p class="status">UPCOMING MATCH</p>
-  <h2 style="margin:12px 0">Bangladesh VS Pakistan</h2>
-  <p>Match starts soon</p>
-
-  <button class="btn full" onclick="showPage('team')">
-    Create Team
-  </button>
-</div>
-
+<section id="contests" class="page"><button class="btn dark back" onclick="go('matches')">← Back</button><div class="step">03 / 16</div><div class="title">🏆 Contests</div><div id="contestsBanner"></div><div class="sub" id="contestMatchName"></div><div id="contestsBox"></div></section>
+<section id="join" class="page"><button class="btn dark back" onclick="go('contests')">← Back</button><div class="step">04 / 16</div><div class="title">🤝 Join Contest</div><div id="joinBox"></div></section>
+<section id="create" class="page"><button class="btn dark back" onclick="go('join')">← Back</button><div class="step">05 / 16</div><div class="title">👥 Create Team</div><div class="sub">১১ জন Player নির্বাচন করুন</div><div id="createBanner"></div><div class="budget"><span>Players <b id="cnt">0</b>/11</span><span>Credits <b id="credit">100</b></span></div>
+<div class="filters"><button class="active" onclick="filterRole('ALL',this)">All</button><button onclick="filterRole('BAT',this)">BAT</button><button onclick="filterRole('AR',this)">AR</button><button onclick="filterRole('WK',this)">WK</button><button onclick="filterRole('BOWL',this)">BOWL</button></div><div id="players" class="players"></div><button class="btn full" onclick="goCV()">Next: C / VC →</button></section>
+<section id="cv" class="page"><button class="btn dark back" onclick="go('create')">← Back</button><div class="step">06 / 16</div><div class="title">👑 Captain / ⭐ Vice-Captain</div><div class="sub">Captain 2× এবং VC 1.5× Points</div><div id="cvList"></div><button class="btn full" onclick="saveTeam()">💾 Save Team</button></section>
+<section id="saved" class="page"><div class="step">07 / 16</div><div class="title">✅ Team Saved</div><div class="card wallet"><div style="font-size:38px">✓</div><b>Your Team has been saved</b><div class="small" id="savedInfo"></div><button class="btn full" onclick="go('myteams')">View My Teams</button></div></section>
+<section id="myteams" class="page"><div class="step">08 / 16</div><div class="title">📋 My Teams</div><div class="sub">প্রতিটি ম্যাচের জন্য আপনার তৈরি Team</div><div id="teams"></div><button class="btn full" onclick="createAnother()">+ Create Another Team</button></section>
+<section id="live" class="page"><div class="step">09 / 16</div><div class="title">🔴 Live Matches</div><div id="liveList"></div></section>
+<section id="livescore" class="page"><button class="btn dark back" onclick="go('live')">← Back</button><div class="step">10 / 16</div><div class="title">📺 Live Score</div><div id="liveScoreBox"></div><button class="btn full" onclick="go('points')">View Live Points</button></section>
+<section id="points" class="page"><div class="step">11 / 16</div><div class="title">⭐ Live Points</div><div id="pointBox"></div><button class="btn full" onclick="go('leaderboard')">Leaderboard →</button></section>
+<section id="leaderboard" class="page"><div class="step">12 / 16</div><div class="title">🏆 Leaderboard</div><div id="leaderBox"></div><button class="btn full" onclick="go('coins')">Prize/Coins →</button></section>
+<section id="coins" class="page"><div class="step">13 / 16</div><div class="title">🪙 Coins</div><div id="coinsBanner"></div><div class="card wallet"><div class="small">Your Coin Balance</div><div class="walletNum gold" id="coinBig">100</div><button id="adRewardBtn" class="btn full" onclick="ad()">📺 Watch Ad +10 Coins</button></div><div class="card"><b>Coin Rules</b><div class="small">Contest Entry: 100 / 200 / 300 Coins</div><div class="small">Team তৈরি করতে Coins লাগে না</div></div></section>
+<section id="invitePage" class="page"><div class="step">15 / 16</div><div class="title">🎁 Invite & Earn</div><div class="card wallet"><div style="font-size:35px">🤝</div><b>Invite your friends & Earn Coins</b><div class="small">Demo reward +100 Coins • Referral tracking enabled</div><div class="small">Invite Code: <b id="inviteCode">FX1001</b> • Invited: <b id="inviteCount">0</b></div><button class="btn full" onclick="invite()">Share Now</button></div></section>
+<section id="profile" class="page"><div class="step">16 / 16</div><div class="title">👤 Profile</div><div class="card"><b id="profileName">FantasyXI User</b><div class="small">আপনার Account</div></div><div class="profileItem" onclick="go('myteams')">👥 My Teams <b>›</b></div><div class="profileItem" onclick="go('coins')">🪙 Coin Wallet <b>›</b></div><div class="profileItem" onclick="go('invitePage')">🎁 Invite & Earn <b>›</b></div><div class="profileItem" onclick="go('extras')">⚙️ Settings / Extra <b>›</b></div></section>
+<section id="extras" class="page"><button class="btn dark back" onclick="go('profile')">← Back</button><div class="title">⚙️ Extra Features</div>
+<div class="fxExtra"><h3>👤 Account</h3><div class="row"><input id="userName" placeholder="আপনার নাম"><button onclick="saveUser()">Save</button></div><div id="userStatus" class="fxStatus"></div></div>
+<div class="fxExtra"><h3>🏆 Winner Settlement</h3><div class="row"><input id="winnerPrize" type="number" min="0" value="100"><button onclick="settleWinner()">Add Coins</button></div><div class="fxStatus">Demo result-এর জন্য Coins-এ Demo reward যোগ হবে।</div></div><div class="fxExtra"><h3>📺 Ad Reward</h3><button onclick="runAd()">Watch Demo Ad</button><div id="adStatus" class="fxStatus">সম্পূর্ণ Demo Ad দেখলে +10 Coins</div></div>
+<div class="fxExtra"><h3>📡 Live Score Refresh</h3><button onclick="refreshLiveDemo()">Refresh Score</button><div id="apiStatus" class="fxStatus">Demo live score refresh। Real API/backend যুক্ত করলে real score আসবে।</div></div>
+<div class="fxExtra"><h3>🔔 App Settings</h3><div class="row"><label class="small">Notifications</label><button id="notifyBtn" onclick="toggleSetting('notify')">ON</button></div><div class="row"><label class="small">Sound</label><button id="soundBtn" onclick="toggleSetting('sound')">ON</button></div></div>
+<div class="fxExtra"><h3>🛡️ Backend Note</h3><div class="fxStatus">এই HTML version-এ data localStorage-এ Demo হিসেবে থাকে। Real users, secure contest settlement এবং real live score-এর জন্য secure backend/API প্রয়োজন।</div></div>
 </section>
 
-<!-- TEAM -->
-<section id="team" class="page">
 
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h2>Create Your Team</h2>
-
-<div class="card">
-  <p>Players: <b id="selectedCount">0</b>/11</p>
-  <p>Credits: <b id="credits">100</b></p>
 </div>
 
-<div class="filters">
-  <button class="filter active" onclick="filterPlayers('ALL',this)">ALL</button>
-  <button class="filter" onclick="filterPlayers('BAT',this)">BAT</button>
-  <button class="filter" onclick="filterPlayers('AR',this)">AR</button>
-  <button class="filter" onclick="filterPlayers('WK',this)">WK</button>
-  <button class="filter" onclick="filterPlayers('BOWL',this)">BOWL</button>
-</div>
-
-<div id="players"></div>
-
-<button class="btn full" onclick="saveTeam()">
-  Save Team
-</button>
-
-</section>
-
-<!-- CONTESTS -->
-<section id="contests" class="page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h2>🏆 Contests</h2>
-
-<div class="card contest">
-  <div>
-    <b>Small Contest</b>
-    <p>10 Players</p>
-    <p class="prize">Prize ৳100</p>
-  </div>
-  <button class="btn" onclick="joinContest(100)">Join 100</button>
-</div>
-
-<div class="card contest">
-  <div>
-    <b>Medium Contest</b>
-    <p>50 Players</p>
-    <p class="prize">Prize ৳500</p>
-  </div>
-  <button class="btn" onclick="joinContest(200)">Join 200</button>
-</div>
-
-<div class="card contest">
-  <div>
-    <b>Grand Contest</b>
-    <p>100 Players</p>
-    <p class="prize">Prize ৳1000</p>
-  </div>
-  <button class="btn" onclick="joinContest(300)">Join 300</button>
-</div>
-
-</section>
-
-<!-- LIVE -->
-<section id="live" class="page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h2>🔴 Live Match</h2>
-
-<div class="card">
-  <p class="status">LIVE</p>
-  <h2>Bangladesh 🇧🇩 vs Pakistan 🇵🇰</h2>
-  <br>
-  <h1>145/4</h1>
-  <p>17.2 Overs</p>
-</div>
-
-<div class="card">
-  <h3>Live Points</h3>
-  <p style="margin-top:10px">+1 Run</p>
-  <p>+2 Four</p>
-  <p>+3 Six</p>
-  <p>+4 Wicket</p>
-</div>
-
-</section>
-
-<!-- PROFILE -->
-<section id="profile" class="page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h2>👤 Profile</h2>
-
-<div class="card">
-  <input id="name" placeholder="Your Name">
-  <input id="phone" placeholder="Phone Number">
-
-  <button class="btn full" onclick="saveProfile()">
-    Save Profile
-  </button>
-</div>
-
-<div class="card">
-  <h3>🪙 Coins</h3>
-  <div class="balance" id="profileCoins">1000</div>
-</div>
-
-<div class="card">
-  <h3>💰 Prize Balance</h3>
-  <div class="balance">৳0</div>
-</div>
-
-<div class="card">
-  <h3>🎁 Invite & Earn</h3>
-  <p style="margin:10px 0">
-    বন্ধুকে Invite করলে +100 Coins
-  </p>
-  <button class="btn" onclick="invite()">
-    Invite
-  </button>
-</div>
-
-</section>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom">
-
-<div class="nav active" onclick="showPage('home',this)">
-  <span>🏠</span>
-  Home
-</div>
-
-<div class="nav" onclick="showPage('match',this)">
-  <span>🏏</span>
-  Matches
-</div>
-
-<div class="nav" onclick="showPage('contests',this)">
-  <span>🏆</span>
-  Contests
-</div>
-
-<div class="nav" onclick="showPage('profile',this)">
-  <span>👤</span>
-  Profile
-</div>
-
-</nav>
-
+<nav class="bottom"><button class="nav active" onclick="go('home',this)"><span>🏠</span>Home</button><button class="nav" onclick="go('matches',this)"><span>🔴</span>Matches</button><button class="nav" onclick="go('coins',this)"><span>📺</span>Ad</button><button class="nav" onclick="go('profile',this)"><span>👤</span>Profile</button></nav>
+<div id="toast" class="toast"></div>
 </div>
 
 <script>
-
-let coins = Number(localStorage.getItem("coins")) || 1000;
-
-let players = [
- {name:"Shakib Al Hasan",role:"AR",credit:10},
- {name:"Litton Das",role:"WK",credit:9},
- {name:"Najmul Hossain",role:"BAT",credit:8.5},
- {name:"Mushfiqur Rahim",role:"WK",credit:9},
- {name:"Towhid Hridoy",role:"BAT",credit:8},
- {name:"Mehidy Hasan",role:"AR",credit:9},
- {name:"Mustafizur Rahman",role:"BOWL",credit:8.5},
- {name:"Taskin Ahmed",role:"BOWL",credit:8},
- {name:"Tanzid Hasan",role:"BAT",credit:8},
- {name:"Rishad Hossain",role:"BOWL",credit:8},
- {name:"Nasum Ahmed",role:"BOWL",credit:7.5},
-
- {name:"Babar Azam",role:"BAT",credit:10},
- {name:"Mohammad Rizwan",role:"WK",credit:9.5},
- {name:"Shaheen Afridi",role:"BOWL",credit:9},
- {name:"Shadab Khan",role:"AR",credit:9},
- {name:"Fakhar Zaman",role:"BAT",credit:8.5},
- {name:"Imad Wasim",role:"AR",credit:8},
- {name:"Haris Rauf",role:"BOWL",credit:8.5}
+const P=[
+['Shanto','BAT','🇧🇩',9],['Babar Azam','BAT','🇵🇰',10],['Litton Das','WK','🇧🇩',9],['Rizwan','WK','🇵🇰',10],
+['Towhid Hridoy','BAT','🇧🇩',8],['Fakhar Zaman','BAT','🇵🇰',9],['Najmul Hossain','BAT','🇧🇩',8],['Imam-ul-Haq','BAT','🇵🇰',8],
+['Mehidy Hasan','AR','🇧🇩',10],['Shadab Khan','AR','🇵🇰',11],['Shakib Al Hasan','AR','🇧🇩',11],
+['Mustafizur Rahman','BOWL','🇧🇩',9],['Taskin Ahmed','BOWL','🇧🇩',8],['Shaheen Afridi','BOWL','🇵🇰',11],
+['Haris Rauf','BOWL','🇵🇰',10],['Nasum Ahmed','BOWL','🇧🇩',8],['Rishad Hossain','AR','🇧🇩',9],
+['Hasan Ali','BOWL','🇵🇰',8],['Tanzid Hasan','BAT','🇧🇩',8],['Imad Wasim','AR','🇵🇰',9],
+['Saim Ayub','BAT','🇵🇰',9],['Soumya Sarkar','BAT','🇧🇩',8]
+].map((x,i)=>({id:i+1,name:x[0],role:x[1],av:x[2],price:x[3]}));
+const matches=[
+{id:'afgpak',name:'🇦🇫 Afghanistan vs 🇵🇰 Pakistan',date:'16 Aug • 8:00 PM',start:Date.now()+86400000,score:'0/0',over:'0.0 overs',event:'Match not started'},
+{id:'indsl',name:'🇮🇳 India vs 🇱🇰 Sri Lanka',date:'17 Aug • 7:30 PM',start:Date.now()+172800000,score:'0/0',over:'0.0 overs',event:'Match not started'}
 ];
-
-let selected = [];
-
-function updateCoins(){
-  document.getElementById("coins").innerText = coins;
-  document.getElementById("profileCoins").innerText = coins;
-  localStorage.setItem("coins",coins);
+const stats={
+Shanto:{runs:32,fours:3,sixes:1,wickets:0},'Babar Azam':{runs:28,fours:2,sixes:0,wickets:0},
+'Litton Das':{runs:21,fours:2,sixes:0,wickets:0},Rizwan:{runs:18,fours:1,sixes:1,wickets:0},
+'Towhid Hridoy':{runs:16,fours:1,sixes:0,wickets:0},'Fakhar Zaman':{runs:15,fours:1,sixes:1,wickets:0},
+'Najmul Hossain':{runs:12,fours:1,sixes:0,wickets:0},'Imam-ul-Haq':{runs:11,fours:1,sixes:0,wickets:0},
+'Mehidy Hasan':{runs:9,fours:0,sixes:0,wickets:1},'Shadab Khan':{runs:8,fours:0,sixes:1,wickets:1},
+'Shakib Al Hasan':{runs:7,fours:1,sixes:0,wickets:1},'Mustafizur Rahman':{runs:0,fours:0,sixes:2},
+'Taskin Ahmed':{runs:0,fours:0,sixes:1},'Shaheen Afridi':{runs:0,fours:0,sixes:2},'Haris Rauf':{runs:0,fours:0,sixes:1}
+};
+const defaultBanners={home:true,matches:true,contests:true,create:true,coins:true,text:'FantasyXI • Demo Banner Ad',target:'home'};
+let coins=Number(localStorage.getItem('fx_coins')||100);
+let teams=JSON.parse(localStorage.getItem('fx_teams_all')||'[]');
+let prizeHistory=JSON.parse(localStorage.getItem('fx_prize_history')||'[]');
+let transactions=JSON.parse(localStorage.getItem('fx_transactions')||'[]');
+let inviteCount=Number(localStorage.getItem('fx_invite_count')||0);
+let settings=JSON.parse(localStorage.getItem('fx_settings')||'{"notify":true,"sound":true}');
+let banners=JSON.parse(localStorage.getItem('fx_banners')||JSON.stringify(defaultBanners));
+let appFeatures={banner:true,badge:true,invite:true,liveScore:true,adReward:true};
+let editingTeamId=null,chosen=[],cap=null,vc=null,role='ALL',selectedMatch=matches[0]?.id||null,selectedContest=null,entry=100,timer=null;
+function save(){localStorage.setItem('fx_coins',coins);localStorage.setItem('fx_teams_all',JSON.stringify(teams));localStorage.setItem('fx_prize_history',JSON.stringify(prizeHistory));localStorage.setItem('fx_transactions',JSON.stringify(transactions));localStorage.setItem('fx_invite_count',inviteCount);localStorage.setItem('fx_settings',JSON.stringify(settings));localStorage.setItem('fx_banners',JSON.stringify(banners));update()}
+function update(){let bs=document.getElementById('badgeFeatureSection');if(bs)bs.style.display=appFeatures.badge===false?'none':'';let ar=document.getElementById('adRewardBtn');if(ar)ar.style.display=appFeatures.adReward===false?'none':'';let inv=document.querySelector("[onclick=\"go('invitePage')\"]");if(inv)inv.style.display=appFeatures.invite===false?'none':'';['coins','coinBig'].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=coins});let n=localStorage.getItem('fx_user_name');if(n)document.getElementById('profileName').textContent=n;let ic=document.getElementById('inviteCount');if(ic)ic.textContent=inviteCount;let nb=document.getElementById('notifyBtn');if(nb)nb.textContent=settings.notify?'ON':'OFF';let sb=document.getElementById('soundBtn');if(sb)sb.textContent=settings.sound?'ON':'OFF';renderBanners();renderBadges();renderNotifications()}
+function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>e.style.display='none',2200)}
+function isLive(m){return Date.now()>=m.start} function getMatch(id){return matches.find(m=>m.id===id)} function matchCompleted(m){return Date.now()>=m.start+120*60000}
+function go(id,nav){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));let e=document.getElementById(id);if(!e)return;e.classList.add('active');if(nav){document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));nav.classList.add('active')}
+if(id==='home')renderHome();if(id==='matches')renderMatches('upcoming');if(id==='contests')renderContests();if(id==='create')renderPlayers();if(id==='cv')renderCV();if(id==='myteams')renderTeams();if(id==='live')renderLive();if(id==='livescore')renderLiveScore();if(id==='points')renderPoints();if(id==='leaderboard')renderLB();update();scrollTo(0,0)}
+function renderBanner(id,key){let e=document.getElementById(id);if(!e)return;if(!banners[key]||appFeatures.banner===false){e.innerHTML='';return}let target=banners.target||'home';e.innerHTML=`<div class="bannerSlot clickable" onclick="bannerClick()"><b>📢 ${escapeHtml(banners.text||'FantasyXI • Banner Ad')}</b></div>`}
+function renderBanners(){renderBanner('homeBanner','home');renderBanner('matchesBanner','matches');renderBanner('contestsBanner','contests');renderBanner('createBanner','create');renderBanner('coinsBanner','coins')}
+function bannerClick(){let t=banners.target||'home';if(document.getElementById(t))go(t);else go('home')}
+function renderHome(){renderBanners();}
+function renderMatches(tab='upcoming',btn){let b=document.getElementById('matchList');b.innerHTML='';if(btn){document.querySelectorAll('#matches .tabs button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}let arr=matches.filter(m=>tab==='live'?isLive(m)&&!matchCompleted(m):tab==='completed'?matchCompleted(m):!isLive(m)&&!matchCompleted(m));if(!arr.length){b.innerHTML='<div class="card small">এই বিভাগে কোনো ম্যাচ নেই।</div>';return}arr.forEach(m=>{let st=matchCompleted(m)?'COMPLETED':isLive(m)?'LIVE':'UPCOMING',d=document.createElement('div');d.className='match';d.innerHTML=`<div class="row"><div><b>${m.name}</b><div class="small">${m.date}</div>${st==='UPCOMING'?`<div class="countdown">⏳ ${Math.max(0,Math.ceil((m.start-Date.now())/1000))}সে পরে LIVE</div>`:st==='LIVE'?`<div class="small"><span class="badge">LIVE</span> ${m.score} • ${m.over}</div>`:`<div class="small">🏁 Result completed • ${m.score}</div>`}</div>${st==='LIVE'?`<button class="btn" onclick="openLive('${m.id}')">Live →</button>`:st==='UPCOMING'?`<button class="btn" onclick="openUpcoming('${m.id}')">Contest →</button>`:`<span class="statusPill">Completed</span>`}</div>`;b.appendChild(d)})}
+function openUpcoming(id){selectedMatch=id;renderContests();go('contests')} function openLive(id){selectedMatch=id;let m=getMatch(id);if(!isLive(m))return toast('ম্যাচ এখনো Live হয়নি');renderLiveScore();go('livescore')}
+function getMatchContests(m){
+  return [
+    {id:'c1',name:'Contest 1',entry:100,min:1,max:50,prize:500},
+    {id:'c2',name:'Contest 2',entry:200,min:1,max:50,prize:300},
+    {id:'c3',name:'Contest 3',entry:300,min:1,max:50,prize:200}
+  ];
 }
-
-function showPage(id,el){
-
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
-
-  document.getElementById(id)
-    .classList.add("active");
-
-  document.querySelectorAll(".nav")
-    .forEach(n=>n.classList.remove("active"));
-
-  if(el) el.classList.add("active");
-
-  if(id==="team") renderPlayers();
-}
-
-function renderPlayers(role="ALL"){
-
-  const box=document.getElementById("players");
-  box.innerHTML="";
-
-  players
-  .filter(p=>role==="ALL" || p.role===role)
-  .forEach((p,index)=>{
-
-    const isSelected=selected.includes(index);
-
-    box.innerHTML+=`
-      <div class="player">
-        <div>
-          <b>${p.name}</b><br>
-          <small>${p.role} • ${p.credit} Credits</small>
-        </div>
-
-        <button class="btn ${isSelected?'dark':''}"
-          onclick="togglePlayer(${index})">
-          ${isSelected?'✓':'+'}
-        </button>
-      </div>
-    `;
+function contestPrizes(pool){return [pool,Math.max(0,Math.round(pool*.6)),Math.max(0,Math.round(pool*.4))]}
+function contestJoinClosed(m){return Date.now()>=m.start-5*60000}
+function renderContests(){
+  let m=getMatch(selectedMatch);
+  document.getElementById('contestMatchName').textContent=m.name;
+  let b=document.getElementById('contestsBox');b.innerHTML='';
+  if(matchCompleted(m)||isLive(m)||contestJoinClosed(m)){
+    b.innerHTML='<div class="card">🔒 এই ম্যাচে এখন নতুন Contest Join করা যাবে না।</div>';
+    return;
+  }
+  const list=getMatchContests(m);
+  if(!list.length){b.innerHTML='<div class="card small">এই ম্যাচের জন্য কোনো Contest চালু নেই।</div>';return;}
+  list.forEach(x=>{
+    let joined=teams.some(t=>t.match===m.id&&t.contest===x.id);
+    let ps=contestPrizes(x.prize);
+    let d=document.createElement('div');d.className='contest';
+    d.innerHTML=`<div class="prize">🏆 Winner Coins: <b class="gold">${x.prize} Coins</b>${ps.map((v,j)=>`<div class="prizeRow"><span>${j+1}${j===0?'st':j===1?'nd':'rd'}</span><b>${v} Coins</b></div>`).join('')}</div>
+    <div class="row"><div><b>${escapeHtml(x.name)}</b><div class="small">${x.min}–${x.max} জন • Entry: <b class="gold">${x.entry} Coins</b></div></div>
+    <button class="btn ${joined?'disabled':''}" onclick="openJoin('${x.id}',${x.entry},${x.prize})">${joined?'Joined':'Join'}</button></div>`;
+    b.appendChild(d);
   });
 }
-
-function filterPlayers(role,button){
-
-  document.querySelectorAll(".filter")
-    .forEach(b=>b.classList.remove("active"));
-
-  button.classList.add("active");
-
-  renderPlayers(role);
+function openJoin(k,e,p){
+  selectedContest=k;entry=e;
+  document.getElementById('joinBox').innerHTML=`<div class="card"><div class="prize">🏆 Winner Reward <b class="gold">${p} Coins</b></div><div class="row"><span>Entry</span><b class="gold">${e} Coins</b></div><div class="row"><span>My Coins</span><b>${coins}</b></div><button class="btn full" onclick="joinContest()">Join Contest</button></div>`;
+  go('join');
 }
-
-function togglePlayer(index){
-
-  if(selected.includes(index)){
-    selected=selected.filter(i=>i!==index);
-  }else{
-
-    if(selected.length>=11){
-      alert("সর্বোচ্চ 11 জন Player নির্বাচন করতে পারবে।");
-      return;
-    }
-
-    selected.push(index);
-  }
-
-  document.getElementById("selectedCount").innerText=selected.length;
-
-  renderPlayers();
+function joinContest(){
+  let m=getMatch(selectedMatch);
+  if(isLive(m)||contestJoinClosed(m))return toast('🔒 Contest এখন বন্ধ');
+  const c=getMatchContests(m).find(x=>x.id===selectedContest);
+  if(!c)return toast('❌ Contest পাওয়া যায়নি');
+  entry=c.entry;
+  if(coins<entry)return toast('❌ পর্যাপ্ত Coins নেই');
+  if(teams.some(t=>t.match===selectedMatch&&t.contest===selectedContest))return toast('এই Contest-এ Team already আছে');
+  coins-=entry;addTransaction('debit',entry,'Contest Entry');save();toast('✅ Contest Joined');setTimeout(()=>go('create'),250);
 }
+function filterRole(r,b){role=r;document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderPlayers()}
+function renderPlayers(){let b=document.getElementById('players');b.innerHTML='';P.filter(p=>role==='ALL'||p.role===role).forEach(p=>{let s=chosen.includes(p.id),d=document.createElement('div');d.className='player';d.innerHTML=`<div class="avatar">${p.av}</div><div class="grow"><b>${p.name}</b><div class="pm">${p.role} • ${p.price} Credits</div></div><button class="buy ${s?'sel':''}" onclick="togglePlayer(${p.id})">${s?'✓':'+'}</button>`;b.appendChild(d)});document.getElementById('cnt').textContent=chosen.length;document.getElementById('credit').textContent=100-chosen.reduce((s,id)=>s+P.find(p=>p.id===id).price,0)}
+function togglePlayer(id){let i=chosen.indexOf(id);if(i>=0){chosen.splice(i,1);if(cap===id)cap=null;if(vc===id)vc=null}else{let p=P.find(x=>x.id===id),spent=chosen.reduce((s,x)=>s+P.find(q=>q.id===x).price,0);if(chosen.length>=11)return toast('সর্বোচ্চ ১১ জন');if(spent+p.price>100)return toast('100 Credits-এর বেশি');chosen.push(id)}renderPlayers()}
+function goCV(){let c=r=>chosen.filter(id=>P.find(p=>p.id===id).role===r).length;if(chosen.length!==11||c('BAT')!==5||c('AR')!==2||c('WK')!==1||c('BOWL')!==3)return toast('ঠিক 5 BAT + 2 AR + 1 WK + 3 BOWL লাগবে');renderCV();go('cv')}
+function renderCV(){let b=document.getElementById('cvList');b.innerHTML='';chosen.forEach(id=>{let p=P.find(x=>x.id===id),d=document.createElement('div');d.className='player';d.innerHTML=`<div class="avatar">${p.av}</div><div class="grow"><b>${p.name}</b><div class="pm">${p.role}</div></div><button class="buy ${cap===id?'sel':''}" onclick="setC(${id})">C</button><button class="buy ${vc===id?'sel':''}" onclick="setVC(${id})">VC</button>`;b.appendChild(d)})}
+function setC(id){if(vc===id)vc=null;cap=cap===id?null:id;renderCV()}function setVC(id){if(cap===id)cap=null;vc=vc===id?null:id;renderCV()}
+function saveTeam(){let m=getMatch(selectedMatch);if(isLive(m)||matchCompleted(m))return toast('🔴 ম্যাচ Live/Completed — Team বন্ধ');if(cap===null||vc===null)return toast('C এবং VC নির্বাচন করুন');let spent=chosen.reduce((s,id)=>s+P.find(p=>p.id===id).price,0);if(editingTeamId){let t=teams.find(x=>x.id===editingTeamId);if(t)Object.assign(t,{players:[...chosen],cap,vc,spent})}else teams.push({id:'T'+Date.now(),match:selectedMatch,contest:selectedContest,players:[...chosen],cap,vc,spent,prize:0});save();document.getElementById('savedInfo').textContent=`${m.name} • Contest ${selectedContest?.replace('c','')} • 11/11 Players`;chosen=[];cap=null;vc=null;editingTeamId=null;go('saved');toast('✅ Team Saved')}
+function renderTeams(){let b=document.getElementById('teams');b.innerHTML='';if(!teams.length){b.innerHTML='<div class="card small">এখনো Team তৈরি হয়নি।</div>';return}teams.forEach((t,i)=>{let m=getMatch(t.match),pts=teamPoints(t),d=document.createElement('div');d.className='contest';d.innerHTML=`<div class="row"><div><b>Team ${i+1}</b><div class="small">${m.name}</div><div class="small">Contest ${t.contest?.replace('c','')||1} • ⭐ ${pts} Points</div></div><button class="btn" onclick="viewTeam('${t.id}')">View</button></div>`;b.appendChild(d)})}
+function createAnother(){let m=matches.find(x=>!isLive(x));if(!m)return toast('কোনো Upcoming ম্যাচ নেই');selectedMatch=m.id;selectedContest='c1';chosen=[];cap=null;vc=null;go('create')}
+function viewTeam(id){let t=teams.find(x=>x.id===id);if(!t)return;document.getElementById('teams').innerHTML=`<button class="btn dark back" onclick="renderTeams()">← My Teams</button><div class="title">👥 Team Players</div>`+t.players.map(id=>{let p=P.find(x=>x.id===id),base=points(stats[p.name]||{}),mul=id===t.cap?2:id===t.vc?1.5:1;return `<div class="player"><div class="avatar">${p.av}</div><div class="grow"><b>${p.name}</b><div class="pm">${p.role} • ${base*mul} Points</div></div></div>`}).join('')}
+function renderLive(){let b=document.getElementById('liveList');if(appFeatures.liveScore===false){b.innerHTML='<div class="card">Live Score Feature বর্তমানে বন্ধ।</div>';return}b.innerHTML='';let arr=matches.filter(isLive);if(!arr.length){b.innerHTML='<div class="card">এখন কোনো ম্যাচ Live নেই।</div>';return}arr.forEach(m=>b.innerHTML+=`<div class="livebox"><div class="row"><b>${m.name}</b><span class="badge">LIVE</span></div><div class="score">${m.score}</div><div class="small">${m.over}</div><button class="btn full" onclick="openLive('${m.id}')">Live Score →</button></div>`)}
+function renderLiveScore(){if(appFeatures.liveScore===false)return;let m=getMatch(selectedMatch);document.getElementById('liveScoreBox').innerHTML=`<div class="liveScoreCard"><span class="badge">LIVE</span><div class="score">${m.score}</div><div class="small">${m.name} • ${m.over}</div><div class="event">${m.event}</div><div class="card" style="margin-top:7px"><b>BATTING / MATCH EVENTS</b><div class="pointLine"><span>Shanto</span><b>32</b></div><div class="pointLine"><span>Babar Azam</span><b>28</b></div><div class="pointLine"><span>Mehidy Hasan</span><b>13</b></div></div></div>`}
+function points(p){return (p.runs||0)+(p.fours||0)*2+(p.sixes||0)*3+(p.wickets||0)*4}
+function teamPoints(t){return Math.round(t.players.reduce((s,id)=>{let p=P.find(x=>x.id===id),v=points(stats[p.name]||{});return s+(id===t.cap?v*2:id===t.vc?v*1.5:v)},0)*10)/10}
+function renderPoints(){if(appFeatures.liveScore===false)return;let t=teams.find(x=>x.match===selectedMatch),b=document.getElementById('pointBox');if(!t){b.innerHTML='<div class="card small">এই ম্যাচে আপনার Team নেই।</div>';return}b.innerHTML=t.players.map(id=>{let p=P.find(x=>x.id===id),base=points(stats[p.name]||{}),mul=id===t.cap?2:id===t.vc?1.5:1;return `<div class="pointLine"><span>${p.av} ${p.name}</span><b class="green">${base*mul}</b></div>`}).join('')+`<div class="card" style="margin-top:7px"><b>Total Fantasy Points: <span class="green">${teamPoints(t)}</span></b></div>`}
+function renderLB(){let own=teams.find(x=>x.match===selectedMatch),rows=[];if(own)rows.push(['My Fantasy XI',teamPoints(own)]);rows.push(['Team Rahim',142],['Team Karim',137],['Team Hasan',129],['Team Akash',121]);rows.sort((a,b)=>b[1]-a[1]);document.getElementById('leaderBox').innerHTML=rows.map((r,i)=>`<div class="lb"><div class="rank">${i+1}</div><div class="grow"><b>${r[0]}</b><div class="small">Fantasy XI</div></div><b class="green">${r[1]}</b></div>`).join('')}
+function ad(){coins+=10;save();toast('🎉 +10 Coins')}function invite(){inviteCount++;coins+=100;addTransaction('credit',100,'Invite Reward');save();toast('🎁 +100 Demo Coins')}
+function addTransaction(type,amount,reason){transactions.push({type,amount,reason,date:new Date().toLocaleString('bn-BD')})}
+function toggleSetting(k){settings[k]=!settings[k];save();toast(settings[k]?'ON':'OFF')}
+function settleWinner(){let a=Math.max(0,Number(document.getElementById('winnerPrize').value||0));coins+=a;addTransaction('credit',a,'Demo Winner Coins');save();toast('🏆 +'+a+' Coins যোগ হয়েছে')}
+function saveUser(){let n=document.getElementById('userName').value.trim();if(!n)return toast('নাম লিখুন');localStorage.setItem('fx_user_name',n);document.getElementById('userStatus').textContent='✅ Profile saved: '+n;update()}
+function runAd(){let e=document.getElementById('adStatus');e.textContent='⏳ Demo Ad চলছে...';setTimeout(()=>{ad();e.textContent='✅ +10 Coins যোগ হয়েছে'},3000)}
+function refreshLiveDemo(){let m=getMatch(selectedMatch);if(!isLive(m))return toast('ম্যাচ এখনো Live হয়নি');let cur=Number(m.score.split('/')[0])||0;m.score=(cur+1)+'/4';m.over=m.over==='0.0 overs'?'0.1 overs':m.over;document.getElementById('apiStatus').textContent='✅ '+m.score+' • '+m.over;renderLiveScore();renderLive()}
+const badgeFeatures=[{id:1,icon:'🥉',name:'Bronze Badge',cost:5000},{id:2,icon:'🥈',name:'Silver Badge',cost:8000},{id:3,icon:'🥇',name:'Gold Badge',cost:10000},{id:4,icon:'💎',name:'Diamond Badge',cost:15000}];
+function renderBadgeFeatures(){const b=document.getElementById('badgeFeatureGrid');if(!b)return;b.innerHTML=badgeFeatures.map(x=>`<div class="badgeCard"><div class="badgeIcon">${x.icon}</div><b>${x.name}</b><span class="small">Request • ${x.cost} Coins</span><button class="btn" onclick="requestBadge(${x.id})">Request</button></div>`).join('')}
+function requestBadge(id){const phone=(document.getElementById('badgePhone')?.value||'').trim(),personName=(document.getElementById('badgeName')?.value||'').trim(),err=document.getElementById('badgePhoneError');if(!/^01\d{9}$/.test(phone)){if(err)err.textContent='সঠিক ১১ সংখ্যার ফোন নম্বর দিন।';return}if(!personName)return toast('❌ নাম দিন');if(err)err.textContent='';const x=badgeFeatures.find(a=>a.id===id);if(!x)return;let a=[];try{a=JSON.parse(localStorage.getItem('fx_badge_requests')||'[]')}catch(e){}const user=localStorage.getItem('fx_current_user')||'FantasyXI User';if(a.some(r=>r.user===user&&Number(r.badgeId)===Number(id)&&r.status==='pending'))return toast('⏳ এই Badge-এর Request আগে থেকেই Pending');if(coins<x.cost)return toast('❌ পর্যাপ্ত Coins নেই');coins-=x.cost;a.push({id:Date.now()+'_'+id,user,phone,personName,badgeId:id,name:x.name,icon:x.icon,cost:x.cost,status:'pending',date:new Date().toLocaleString('bn-BD'),notificationSent:false,badgeCountApplied:false});localStorage.setItem('fx_badge_requests',JSON.stringify(a));save();document.getElementById('badgeRequestStatus').textContent='✅ '+x.name+' Request পাঠানো হয়েছে • '+x.cost+' Coins কাটা হয়েছে';document.getElementById('badgePhone').value='';document.getElementById('badgeName').value='';toast('🏅 Request পাঠানো হয়েছে')}
+function renderBadges(){let req=readJSON('fx_badge_requests',[]),counts=readJSON('fx_badge_counts',{}),u=localStorage.getItem('fx_current_user')||'FantasyXI User';req.forEach(x=>{if(x.status==='accepted'&&!x.badgeCountApplied){let c=counts[u]||{bronze:0,silver:0,gold:0,diamond:0};if(x.badgeId===1)c.bronze++;if(x.badgeId===2)c.silver++;if(x.badgeId===3)c.gold++;if(x.badgeId===4)c.diamond++;counts[u]=c;x.badgeCountApplied=true} });localStorage.setItem('fx_badge_requests',JSON.stringify(req));localStorage.setItem('fx_badge_counts',JSON.stringify(counts));let c=counts[u]||{bronze:0,silver:0,gold:0,diamond:0};['bronzeCount','silverCount','goldCount','diamondCount'].forEach((id,i)=>{let e=document.getElementById(id);if(e)e.textContent=[c.bronze,c.silver,c.gold,c.diamond][i]||0})}
+function renderNotifications(){let all=readJSON('fx_badge_notifications',{}),u=localStorage.getItem('fx_current_user')||'FantasyXI User',a=(all[u]||[]).slice().reverse().slice(0,5),b=document.getElementById('notificationList');if(!b)return;b.innerHTML=(a.length?a.map(x=>'<div style="padding:5px 0;border-bottom:1px solid #164c3c"><b>'+escapeHtml(x.title)+'</b><br><span class="small">'+escapeHtml(x.text)+'</span></div>').join(''):'')}
+function readJSON(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
-function saveTeam(){
-
-  if(selected.length!==11){
-    alert("আগে 11 জন Player নির্বাচন করো।");
-    return;
-  }
-
-  localStorage.setItem("fantasyTeam",JSON.stringify(selected));
-
-  alert("✅ Team Saved Successfully!");
-
-  showPage("home");
-}
-
-function joinContest(fee){
-
-  if(coins<fee){
-    alert("❌ পর্যাপ্ত Coins নেই।");
-    return;
-  }
-
-  coins-=fee;
-  updateCoins();
-
-  alert("✅ Contest Joined Successfully!");
-}
-
-function invite(){
-
-  coins+=100;
-  updateCoins();
-
-  alert("🎁 +100 Coins Added!");
-}
-
-function saveProfile(){
-
-  localStorage.setItem(
-    "profileName",
-    document.getElementById("name").value
-  );
-
-  localStorage.setItem(
-    "profilePhone",
-    document.getElementById("phone").value
-  );
-
-  alert("✅ Profile Saved!");
-}
-
-updateCoins();
-
-document.getElementById("name").value =
-  localStorage.getItem("profileName") || "";
-
-document.getElementById("phone").value =
-  localStorage.getItem("profilePhone") || "";
-
-renderPlayers();
-
+function boot(){renderBadgeFeatures();update();renderHome();renderMatches();renderLive();renderPlayers();renderTeams()}
+setInterval(()=>{renderMatches();renderLive();renderNotifications()},1000);
+boot();
 </script>
-
 </body>
 </html>
