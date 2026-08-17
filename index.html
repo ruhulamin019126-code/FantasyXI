@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FantasyXI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#031810;
+  color:#fff;
+  min-height:100vh;
+}
+
+.app{
+  max-width:700px;
+  margin:auto;
+  min-height:100vh;
+  background:#06271e;
+  padding-bottom:80px;
+}
+
+header{
+  padding:20px;
+  background:#041c15;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-bottom:1px solid #164b3a;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:bold;
+  color:#18df69;
+}
+
+.coins{
+  background:#123d30;
+  padding:9px 14px;
+  border-radius:20px;
+  color:#ffd84d;
+  font-weight:bold;
+}
+
+.page{
+  display:none;
+  padding:18px;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  background:linear-gradient(135deg,#075b40,#092f24);
+  padding:24px;
+  border-radius:20px;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#b9d8cc;
+  line-height:1.5;
+}
+
+.section-title{
+  font-size:20px;
+  margin:22px 0 12px;
+}
+
+.card{
+  background:#092f24;
+  border:1px solid #16513e;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.match{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.team{
+  text-align:center;
+  font-weight:bold;
+}
+
+.team span{
+  display:block;
+  font-size:30px;
+  margin-bottom:6px;
+}
+
+.status{
+  color:#18df69;
+  font-size:13px;
+}
+
+.btn{
+  border:0;
+  background:#18df69;
+  color:#031810;
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn.full{
+  width:100%;
+  margin-top:12px;
+}
+
+.btn.dark{
+  background:#123d30;
+  color:#fff;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.feature{
+  background:#092f24;
+  border:1px solid #16513e;
+  padding:18px;
+  border-radius:16px;
+  text-align:center;
+}
+
+.feature div{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.player{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px;
+  background:#06271e;
+  border:1px solid #164b3a;
+  border-radius:12px;
+  margin-bottom:8px;
+}
+
+.player small{
+  color:#9dbdb1;
+}
+
+.filters{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:14px;
+}
+
+.filter{
+  white-space:nowrap;
+  padding:9px 14px;
+  border:1px solid #28644f;
+  border-radius:20px;
+  background:#092f24;
+  color:#fff;
+}
+
+.filter.active{
+  background:#18df69;
+  color:#031810;
+}
+
+.contest{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.prize{
+  color:#18df69;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  max-width:700px;
+  margin:auto;
+  height:70px;
+  background:#041c15;
+  border-top:1px solid #164b3a;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.nav{
+  color:#91aaa0;
+  text-align:center;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.nav span{
+  display:block;
+  font-size:22px;
+  margin-bottom:3px;
+}
+
+.nav.active{
+  color:#18df69;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  background:#031810;
+  color:#fff;
+  border:1px solid #28644f;
+  border-radius:10px;
+  margin:7px 0;
+  outline:none;
+}
+
+.balance{
+  font-size:32px;
+  color:#18df69;
+  font-weight:bold;
+  margin:10px 0;
+}
+
+.back{
+  color:#18df69;
+  margin-bottom:15px;
+  cursor:pointer;
+}
+
+.empty{
+  text-align:center;
+  padding:40px 15px;
+  color:#8da99f;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="logo">🏏 FantasyXI</div>
+  <div class="coins">🪙 <span id="coins">1000</span></div>
+</header>
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+<div class="hero">
+  <h1>Fantasy Cricket</h1>
+  <p>নিজের Dream Team তৈরি করো এবং ম্যাচের জন্য প্রস্তুত হও।</p>
+</div>
+
+<h2 class="section-title">🔥 Upcoming Matches</h2>
+
+<div class="card">
+  <div class="match">
+    <div class="team">
+      <span>🇧🇩</span>
+      Bangladesh
+    </div>
+
+    <div>
+      <div class="status">UPCOMING</div>
+      <strong>VS</strong>
+    </div>
+
+    <div class="team">
+      <span>🇵🇰</span>
+      Pakistan
+    </div>
+  </div>
+
+  <button class="btn full" onclick="showPage('match')">
+    View Match
+  </button>
+</div>
+
+<h2 class="section-title">⚡ Features</h2>
+
+<div class="grid">
+  <div class="feature" onclick="showPage('team')">
+    <div>👥</div>
+    Create Team
+  </div>
+
+  <div class="feature" onclick="showPage('contests')">
+    <div>🏆</div>
+    Contests
+  </div>
+
+  <div class="feature" onclick="showPage('live')">
+    <div>🔴</div>
+    Live Match
+  </div>
+
+  <div class="feature" onclick="showPage('profile')">
+    <div>👤</div>
+    Profile
+  </div>
+</div>
+
+</section>
+
+<!-- MATCH -->
+<section id="match" class="page">
+
+<div class="back" onclick="showPage('home')">← Back</div>
+
+<h2>🇧🇩 Bangladesh vs Pakistan 🇵🇰</h2>
+
+<div class="card">
+  <p class="status">UPCOMING MATCH</p>
+  <h2 style="margin:12px 0">Bangladesh VS Pakistan</h2>
+  <p>Match starts soon</p>
+
+  <button class="btn full" onclick="showPage('team')">
+    Create Team
+  </button>
+</div>
+
+</section>
+
+<!-- TEAM -->
+<section id="team" class="page">
+
+<div class="back" onclick="showPage('home')">← Back</div>
+
+<h2>Create Your Team</h2>
+
+<div class="card">
+  <p>Players: <b id="selectedCount">0</b>/11</p>
+  <p>Credits: <b id="credits">100</b></p>
+</div>
+
+<div class="filters">
+  <button class="filter active" onclick="filterPlayers('ALL',this)">ALL</button>
+  <button class="filter" onclick="filterPlayers('BAT',this)">BAT</button>
+  <button class="filter" onclick="filterPlayers('AR',this)">AR</button>
+  <button class="filter" onclick="filterPlayers('WK',this)">WK</button>
+  <button class="filter" onclick="filterPlayers('BOWL',this)">BOWL</button>
+</div>
+
+<div id="players"></div>
+
+<button class="btn full" onclick="saveTeam()">
+  Save Team
+</button>
+
+</section>
+
+<!-- CONTESTS -->
+<section id="contests" class="page">
+
+<div class="back" onclick="showPage('home')">← Back</div>
+
+<h2>🏆 Contests</h2>
+
+<div class="card contest">
+  <div>
+    <b>Small Contest</b>
+    <p>10 Players</p>
+    <p class="prize">Prize ৳100</p>
+  </div>
+  <button class="btn" onclick="joinContest(100)">Join 100</button>
+</div>
+
+<div class="card contest">
+  <div>
+    <b>Medium Contest</b>
+    <p>50 Players</p>
+    <p class="prize">Prize ৳500</p>
+  </div>
+  <button class="btn" onclick="joinContest(200)">Join 200</button>
+</div>
+
+<div class="card contest">
+  <div>
+    <b>Grand Contest</b>
+    <p>100 Players</p>
+    <p class="prize">Prize ৳1000</p>
+  </div>
+  <button class="btn" onclick="joinContest(300)">Join 300</button>
+</div>
+
+</section>
+
+<!-- LIVE -->
+<section id="live" class="page">
+
+<div class="back" onclick="showPage('home')">← Back</div>
+
+<h2>🔴 Live Match</h2>
+
+<div class="card">
+  <p class="status">LIVE</p>
+  <h2>Bangladesh 🇧🇩 vs Pakistan 🇵🇰</h2>
+  <br>
+  <h1>145/4</h1>
+  <p>17.2 Overs</p>
+</div>
+
+<div class="card">
+  <h3>Live Points</h3>
+  <p style="margin-top:10px">+1 Run</p>
+  <p>+2 Four</p>
+  <p>+3 Six</p>
+  <p>+4 Wicket</p>
+</div>
+
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+
+<div class="back" onclick="showPage('home')">← Back</div>
+
+<h2>👤 Profile</h2>
+
+<div class="card">
+  <input id="name" placeholder="Your Name">
+  <input id="phone" placeholder="Phone Number">
+
+  <button class="btn full" onclick="saveProfile()">
+    Save Profile
+  </button>
+</div>
+
+<div class="card">
+  <h3>🪙 Coins</h3>
+  <div class="balance" id="profileCoins">1000</div>
+</div>
+
+<div class="card">
+  <h3>💰 Prize Balance</h3>
+  <div class="balance">৳0</div>
+</div>
+
+<div class="card">
+  <h3>🎁 Invite & Earn</h3>
+  <p style="margin:10px 0">
+    বন্ধুকে Invite করলে +100 Coins
+  </p>
+  <button class="btn" onclick="invite()">
+    Invite
+  </button>
+</div>
+
+</section>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom">
+
+<div class="nav active" onclick="showPage('home',this)">
+  <span>🏠</span>
+  Home
+</div>
+
+<div class="nav" onclick="showPage('match',this)">
+  <span>🏏</span>
+  Matches
+</div>
+
+<div class="nav" onclick="showPage('contests',this)">
+  <span>🏆</span>
+  Contests
+</div>
+
+<div class="nav" onclick="showPage('profile',this)">
+  <span>👤</span>
+  Profile
+</div>
+
+</nav>
+
+</div>
+
+<script>
+
+let coins = Number(localStorage.getItem("coins")) || 1000;
+
+let players = [
+ {name:"Shakib Al Hasan",role:"AR",credit:10},
+ {name:"Litton Das",role:"WK",credit:9},
+ {name:"Najmul Hossain",role:"BAT",credit:8.5},
+ {name:"Mushfiqur Rahim",role:"WK",credit:9},
+ {name:"Towhid Hridoy",role:"BAT",credit:8},
+ {name:"Mehidy Hasan",role:"AR",credit:9},
+ {name:"Mustafizur Rahman",role:"BOWL",credit:8.5},
+ {name:"Taskin Ahmed",role:"BOWL",credit:8},
+ {name:"Tanzid Hasan",role:"BAT",credit:8},
+ {name:"Rishad Hossain",role:"BOWL",credit:8},
+ {name:"Nasum Ahmed",role:"BOWL",credit:7.5},
+
+ {name:"Babar Azam",role:"BAT",credit:10},
+ {name:"Mohammad Rizwan",role:"WK",credit:9.5},
+ {name:"Shaheen Afridi",role:"BOWL",credit:9},
+ {name:"Shadab Khan",role:"AR",credit:9},
+ {name:"Fakhar Zaman",role:"BAT",credit:8.5},
+ {name:"Imad Wasim",role:"AR",credit:8},
+ {name:"Haris Rauf",role:"BOWL",credit:8.5}
+];
+
+let selected = [];
+
+function updateCoins(){
+  document.getElementById("coins").innerText = coins;
+  document.getElementById("profileCoins").innerText = coins;
+  localStorage.setItem("coins",coins);
+}
+
+function showPage(id,el){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.querySelectorAll(".nav")
+    .forEach(n=>n.classList.remove("active"));
+
+  if(el) el.classList.add("active");
+
+  if(id==="team") renderPlayers();
+}
+
+function renderPlayers(role="ALL"){
+
+  const box=document.getElementById("players");
+  box.innerHTML="";
+
+  players
+  .filter(p=>role==="ALL" || p.role===role)
+  .forEach((p,index)=>{
+
+    const isSelected=selected.includes(index);
+
+    box.innerHTML+=`
+      <div class="player">
+        <div>
+          <b>${p.name}</b><br>
+          <small>${p.role} • ${p.credit} Credits</small>
+        </div>
+
+        <button class="btn ${isSelected?'dark':''}"
+          onclick="togglePlayer(${index})">
+          ${isSelected?'✓':'+'}
+        </button>
+      </div>
+    `;
+  });
+}
+
+function filterPlayers(role,button){
+
+  document.querySelectorAll(".filter")
+    .forEach(b=>b.classList.remove("active"));
+
+  button.classList.add("active");
+
+  renderPlayers(role);
+}
+
+function togglePlayer(index){
+
+  if(selected.includes(index)){
+    selected=selected.filter(i=>i!==index);
+  }else{
+
+    if(selected.length>=11){
+      alert("সর্বোচ্চ 11 জন Player নির্বাচন করতে পারবে।");
+      return;
+    }
+
+    selected.push(index);
+  }
+
+  document.getElementById("selectedCount").innerText=selected.length;
+
+  renderPlayers();
+}
+
+function saveTeam(){
+
+  if(selected.length!==11){
+    alert("আগে 11 জন Player নির্বাচন করো।");
+    return;
+  }
+
+  localStorage.setItem("fantasyTeam",JSON.stringify(selected));
+
+  alert("✅ Team Saved Successfully!");
+
+  showPage("home");
+}
+
+function joinContest(fee){
+
+  if(coins<fee){
+    alert("❌ পর্যাপ্ত Coins নেই।");
+    return;
+  }
+
+  coins-=fee;
+  updateCoins();
+
+  alert("✅ Contest Joined Successfully!");
+}
+
+function invite(){
+
+  coins+=100;
+  updateCoins();
+
+  alert("🎁 +100 Coins Added!");
+}
+
+function saveProfile(){
+
+  localStorage.setItem(
+    "profileName",
+    document.getElementById("name").value
+  );
+
+  localStorage.setItem(
+    "profilePhone",
+    document.getElementById("phone").value
+  );
+
+  alert("✅ Profile Saved!");
+}
+
+updateCoins();
+
+document.getElementById("name").value =
+  localStorage.getItem("profileName") || "";
+
+document.getElementById("phone").value =
+  localStorage.getItem("profilePhone") || "";
+
+renderPlayers();
+
+</script>
+
+</body>
+</html>
